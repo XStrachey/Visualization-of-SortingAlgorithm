@@ -1,0 +1,373 @@
+/*BEGIN_OF_INSERTION_SORT*/
+#include <iostream>
+#include <vector>
+using namespace std;
+template <typename T>
+void InsertionSort( vector<T> &nums){
+    for( int i = 1; i < nums.size(); i++ ){
+        T temp = nums[i];
+        int j;
+        for( j = i-1; j >= 0 && nums[j] > temp; j-- ){
+            nums[j+1] = nums[j]; //对应3
+        }
+        nums[j+1] = temp; //4.5
+    }
+}
+int main(){
+    vector<int> nums{11,5,29,1,34,4,12,24,40,5,35,17};
+    cout<<" Before Sort:" ;
+    for( auto m: nums){
+        cout <<  m <<" ";
+    }
+    cout<<endl;
+    InsertionSort( nums );
+    cout<< " After Sort:";
+    for( auto m: nums){
+        cout  << m <<" ";
+    }
+    cout<<endl;
+}
+/*END_OF_INSERTION_SORT*/
+/*BEGIN_OF_SHELL_SORT*/
+void shellSort (int[] a, int n)
+{
+    int i, j, k, h, tmp;
+    int[] cols = {1391376, 463792, 198768, 86961, 33936, 13776, 4592,
+                    1968, 861, 336, 112, 48, 21, 7, 3, 1}
+    for (k=0; k<16; k++)
+    {
+        h=cols[k];
+        for (i=h; i<n; i++)           //i=h,意味着从第二行开始对每列InsertSort
+        {
+            tmp=a[i];                 //插入排序需要的临时变量。
+            j=i;
+            while (j>=h && a[j-h]>tmp)
+            {
+                a[j]=a[j-h];
+                j=j-h;
+            }
+            a[j]=tmp;
+        }
+    }
+}
+/*END_OF_SHELL_SORT*/
+/*BEGIN_OF_QUICK_SORT*/
+#include <iostream>
+using namespace std;
+void Qsort(int a[], int low, int high)
+{
+    if(low >= high)
+    {
+        return;
+    }
+    int first = low;
+    int last = high;
+    int key = a[first];/*用字表的第一个记录作为枢轴*/
+    while(first < last)
+    {
+        while(first < last && a[last] >= key)
+        {
+            --last;
+        }
+        a[first] = a[last];/*将比第一个小的移到低端*/
+        while(first < last && a[first] <= key)
+        {
+            ++first;
+        }         
+        a[last] = a[first];    
+/*将比第一个大的移到高端*/
+    }
+    a[first] = key;/*枢轴记录到位*/
+    Qsort(a, low, first-1);
+    Qsort(a, first+1, high);
+}
+int main()
+{
+    int a[] = {57, 68, 59, 52, 72, 28, 96, 33, 24};
+    Qsort(a, 0, sizeof(a) / sizeof(a[0]) - 1);/*这里第三个参数要减1否则内存越界*/
+    for(int i = 0; i < sizeof(a) / sizeof(a[0]); i++)
+    {
+        cout << a[i] << "";
+    }
+    return 0;
+}
+/*END_OF_QUICK_SORT*/
+/*BEGIN_OF_BUBBLE_SORT*/
+#include <stdio.h>
+#include <stdlib.h>
+#define MAXSIZE 10
+typedef struct
+{
+    int r[MAXSIZE];
+    int length;
+}SqList;
+//交换函数
+void swap(SqList *L, int i, int j){
+    int temp = L->r[i];
+    L->r[i] = L->r[j];
+    L->r[j] = temp;
+}
+//冒泡算法，重点
+void bubbleSort(SqList *L){
+    int i, j;
+    for(i = 1;i < L->length; i++){
+        for(j = L->length - 1; j >= i; j--){
+            if(L->r[j] > L->r[j+1]){
+                swap(L, j, j+1);
+            }
+        }
+    }
+} 
+//初始数组
+void initSort(SqList *L){
+    L->length = MAXSIZE;
+    L->r[0] = 0;
+    int a[9] = {9,1,5,8,3,7,4,6,2} ;
+    for(int i = 1; i<MAXSIZE; i++){
+        L->r[i] = a[i-1];
+    }
+}
+//查询数组
+void searchSort(SqList *L){
+    for(int i = 1; i < MAXSIZE; i++){
+        printf("%d", L->r[i]);
+    }
+}
+int main(){
+    SqList *L = new SqList;
+    initSort(L);
+    searchSort(L);
+    printf("\n");
+    bubbleSort(L);
+    searchSort(L);
+    return 0;
+}
+/*END_OF_BUBBLE_SORT*/
+/*BEGIN_OF_SHAKER_SORT*/
+private void core(int[] array) {
+        int arrayLength = array.length;
+
+        int preIndex = 0;
+        int backIndex = arrayLength - 1;
+        while(preIndex < backIndex) {
+            preSort(array, arrayLength, preIndex);
+            preIndex++;
+
+            if (preIndex >= backIndex) {
+                break;
+            }
+
+            backSort(array, backIndex);
+            backIndex--;
+        }
+    }
+
+    // 从前向后排序
+    private void preSort(int[] array, int length, int preIndex) {
+        for (int i = preIndex + 1; i < length; i++) {
+            if (array[preIndex] > array[i]) {
+                ArrayUtils.swap(array, preIndex, i);
+            }
+        }
+    }
+
+    // 从后向前排序
+    private void backSort(int[] array, int backIndex) {
+        for (int i = backIndex - 1; i >= 0; i--) {
+            if (array[i] > array[backIndex]) {
+                ArrayUtils.swap(array, i, backIndex);
+            }
+        }
+    }
+/*END_OF_SHAKER_SORT*/
+/*BEGIN_OF_SELECT_SORT*/
+function selectionSort(arr) {
+    var len = arr.length;
+    var minIndex, temp;
+    for (var i = 0; i < len - 1; i++) {
+        minIndex = i;                         //每次都从已排序序列的末尾后一位开始
+        for (var j = i + 1; j < len; j++) {
+            if (arr[j] < arr[minIndex]) {     //寻找最小的数
+                minIndex = j;                 //将最小数的索引保存
+            }
+        }
+        
+  //放到已排序序列的末尾(即交换)，该操作很有可能把稳定性打乱，所以选择排序是不稳定的排序算法
+        temp = arr[i];  
+        arr[i] = arr[minIndex];
+        arr[minIndex] = temp;
+    }
+    return arr;
+}
+/*END_OF_SELECT_SORT*/
+/*BEGIN_OF_BINARY_INSERT_SORT*/
+void binaryinsert(Type a[],int length)
+{
+    for(i=1;i<length-1;i++)
+    {//对除第一个元素以外的每个元素做插入
+        //插入到下标范围为0~i-1的区域
+        //分别设置插入区域的边界值
+        int high = i - 1, low = 0;
+
+        //什么时候会发生low>high的情况呢？
+        //当low=high时,可知middle=low=high
+        //待插入的区间只有唯一元素a[middle]
+            //那么，如果a[i]<a[middle]，当前区间的左半边找
+                //high = middle - 1<low
+            //如果a[i]<a[middle]，当前区间的左半边找
+                //low = middle + 1>high
+        //都会跳出循环，此时的a[low]就是第一个比a[i]大的元素
+        while (low<=high)
+        {
+            middle = (high + low) / 2; 
+            //在左半边
+            if (a[middle] > a[i]) 
+                high = middle - 1;
+            //在右半边
+            else
+                low = middle + 1;
+        }
+            //找到第一个比现在要插入的a[i]大的元素，下标为low
+            //那么，从low~i每个元素右移一格
+        Type temp = a[i];
+        for (int t = i;t > middle;t--)
+            a[t] = a[t - 1];
+        a[low] = temp;
+    }
+}
+/*END_OF_BINARY_INSERT_SORT*/
+/*BEGIN_OF_HEAP_SORT*/
+void heapSort(int arr[],int len) {
+    buildMaxHeap(arr,len-1);
+    for(int i=len-1; i>0; i--) {
+        swap(&arr[0],&arr[i]);
+        //buildMaxHeap(arr,i-1);此处无需从新建堆，从新维护堆性质即可
+        maxHeapify(arr,0,i-1);
+    }
+}
+/*END_OF_HEAP_SORT*/
+/*BEGIN_OF_MERGE_SORT*/
+void mergearray(int a[], int first, int mid, int last, int temp[])  
+{  
+    int i = first, j = mid + 1;  
+    int m = mid,   n = last;  
+    int k = 0;  
+    while (i <= m && j <= n)  
+    {  
+        if (a[i] <= a[j])  
+            temp[k++] = a[i++];  
+        else  
+            temp[k++] = a[j++];  
+    }  
+    while (i <= m)  
+        temp[k++] = a[i++];  
+      
+    while (j <= n)  
+        temp[k++] = a[j++];  
+      
+    for (i = 0; i < k; i++)  
+        a[first + i] = temp[i];  
+}  
+void mergesort(int a[], int first, int last, int temp[])  
+{  
+    if (first < last)  
+    {  
+        int mid = (first + last) / 2;  
+        mergesort(a, first, mid, temp);    //左边有序  
+        mergesort(a, mid + 1, last, temp); //右边有序  
+        mergearray(a, first, mid, last, temp); //再将二个有序数列合并  
+    }  
+}  
+bool MergeSort(int a[], int n)  
+{  
+    int *p = new int[n];  
+    if (p == NULL)  
+        return false;  
+    mergesort(a, 0, n - 1, p);  
+    delete[] p;  
+    return true;  
+}  
+/*END_OF_MERGE_SORT*/
+/*BEGIN_OF_RADIX_SORT*/
+int maxbit(int data[], int n) //辅助函数，求数据的最大位数
+{
+    int d = 1; //保存最大的位数
+    int p = 10;
+    for(int i = 0; i < n; ++i)
+    {
+        while(data[i] >= p)
+        {
+            p *= 10;
+            ++d;
+        }
+    }
+    return d;
+}
+void radixsort(int data[], int n) //基数排序
+{
+    int d = maxbit(data, n);
+    int *tmp = newint[n];
+    int *count = newint[10]; //计数器
+    int i, j, k;
+    int radix = 1;
+    for(i = 1; i <= d; i++) //进行d次排序
+    {
+        for(j = 0; j < 10; j++)
+            count[j] = 0; //每次分配前清空计数器
+        for(j = 0; j < n; j++)
+        {
+            k = (data[j] / radix) % 10; //统计每个桶中的记录数
+            count[k]++;
+        }
+        for(j = 1; j < 10; j++)
+            count[j] = count[j - 1] + count[j]; //将tmp中的位置依次分配给每个桶
+        for(j = n - 1; j >= 0; j--) //将所有桶中记录依次收集到tmp中
+        {
+            k = (data[j] / radix) % 10;
+            tmp[count[k] - 1] = data[j];
+            count[k]--;
+        }
+        for(j = 0; j < n; j++) //将临时数组的内容复制到data中
+            data[j] = tmp[j];
+        radix = radix * 10;
+    }
+    delete[]tmp;
+    delete[]count;
+}
+/*END_OF_RADIX_SORT*/
+/*BEGIN_OF_COUNT_SORT*/
+void CountSort(int* array,int size)
+{
+    assert(array);
+    int max = array[0];//序列中的最大值
+    int min = array[0];//序列中的最小值
+    for(int i = 0;i < size;++i)
+    {
+        if(array[i] >= max)
+        {
+            max = array[i];
+        }
+        else
+        {
+            min = array[i];
+        }
+    }
+    int range = max - min + 1;//需要开辟的空间大小
+    int* count = new int[range];
+    memset(count,0,sizeof(int)*range);//辅助空间初始化为0,0代表没有那个数
+
+    for(int i = 0;i < size;++i)
+    {
+        count[array[i] - min]++;//array[i]-min是将该数对应到辅助空间的下标
+    }
+    int index = 0;
+    for(int i = 0;i < range;++i)//遍历辅助空间
+    {
+        while(count[i]--)//下标处的数值是几，说明该数出现了几次
+        {
+            array[index++] = i + min;//将下标处的数对应回原数组
+        }
+    }
+    delete[] count;
+}
+/*END_OF_COUNT_SORT*/
